@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const splitIndex = cleanLine.indexOf('# ');
                 const colorPart = cleanLine.substring(0, splitIndex).trim();
                 const text = cleanLine.substring(splitIndex + 2).trim();
-                const finalColor = colorPart === "" ? "white" : colorPart;
+                const finalColor = colorPart === "" ? defaultColor : colorPart;
         
                 htmlOutput += `<h1 style="color: ${finalColor}">${text}</h1>`;
             } else {
