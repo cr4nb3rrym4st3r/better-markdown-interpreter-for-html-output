@@ -1,0 +1,192 @@
+ <!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>self contained version of the script for offline / self contained app use</title>
+
+    
+
+    <style>
+
+        /* Basic CSS Reset and Font */
+
+        body {
+
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            margin: 0;
+
+            padding: 2rem;
+
+            line-height: 1.6;
+
+            
+
+            /* CRITICAL: Start hidden so we don't see the raw code flash.
+
+               The script will make this visible after processing.
+
+            */
+
+            visibility: hidden; 
+
+            opacity: 0;
+
+            transition: opacity 0.3s ease-in;
+
+        }
+
+
+
+
+
+
+
+        /* Default styling for generated elements */
+
+        h1 { margin-top: 0; margin-bottom: 0.5rem; }
+
+        p { margin-top: 0; margin-bottom: 1rem; }
+
+
+
+
+
+
+
+
+
+    </style>
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // 1. GRAB THE RAW CONTENT
+
+            // We use textContent to ensure we get the raw text exactly as typed
+
+            const rawInput = document.body.textContent.trim();
+
+            
+
+            // 2. CLEAR THE BODY
+
+            // We wipe the raw text out immediately
+
+            document.body.innerHTML = '';
+
+
+            // 3. PARSE THE TEXT
+
+            const lines = rawInput.split('\n');
+
+            let htmlOutput = '';
+
+            
+
+            // Variables for defaults
+
+            let defaultColor = 'white';
+
+            let defaultBg = 'black';
+
+
+            // Check if the first line is the configuration line
+
+            // Looking for the '±' symbol
+
+            if (lines.length > 0 && lines[0].trim().startsWith('±')) {
+
+                const configLine = lines[0].trim();
+
+                const parts = configLine.split('|');
+
+                
+
+                // Format: ±|Color|Background
+
+                if (parts.length >= 3) {
+
+                    defaultColor = parts[1].trim();
+
+                    defaultBg = parts[2].trim();
+
+                }
+
+                
+
+                // Remove the config line so it doesn't print
+
+                lines.shift();
+
+            }
+
+
+            // Apply Body Defaults
+
+            document.body.style.color = defaultColor;
+
+            document.body.style.backgroundColor = defaultBg;
+
+
+            // 4. INTERPRET THE REST OF THE LINES
+
+            lines.forEach(line => {
+
+                const cleanLine = line.trim();
+
+                
+
+                if (cleanLine.length === 0) return; // Skip empty lines
+
+
+                // Check for Title Format: color#Text
+
+                if (cleanLine.includes('#')) {
+
+                    // Split only on the first hash
+
+                    const splitIndex = cleanLine.indexOf('#');
+
+                    const color = cleanLine.substring(0, splitIndex).trim();
+
+                    const text = cleanLine.substring(splitIndex + 1).trim();
+
+
+                    htmlOutput += `<h1 style="color: ${color}">${text}</h1>`;
+
+                } else {
+
+                    // Standard Body Text
+
+                    htmlOutput += `<p>${cleanLine}</p>`;
+
+                }
+
+            });
+
+
+            // 5. INJECT FORMATTED HTML
+
+            document.body.innerHTML = htmlOutput;
+
+
+            // 6. SHOW THE BODY
+
+            document.body.style.visibility = 'visible';
+
+            document.body.style.opacity = '1';
+
+        });
+
+    </script>
+
+</head> 
