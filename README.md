@@ -13,3 +13,11 @@ The script and style live in Github Pages, so that functionality and style(e.g. 
 
 # Syntax
 All current features are visible via the sample syntax seen in the <body> of online-template.html
+### Page and Text Colour
+±|text|page
+### Heading Syntax
+colour# Heading
+
+#FFFFFF# Heading
+
+\# Heading(default text colour applies when no colour is specified)
