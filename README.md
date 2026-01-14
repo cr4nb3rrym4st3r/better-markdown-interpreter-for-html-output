@@ -1,7 +1,7 @@
 # Solo.html 
 is a self contained version of the code. if you wish to use it offline or within a self contained app.
 
-# Online version
+# Online Version
 {online-script.js online-style.css online-template.html} 
 Are designed to be used in geektool widget app(and elsewhere). this allows you to make colourful markdown text living on your home screen.
 
