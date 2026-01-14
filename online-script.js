@@ -30,18 +30,27 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.style.color = defaultColor;
     document.body.style.backgroundColor = defaultBg;
 
-    // Interpret lines
+    // 4. INTERPRET THE REST OF THE LINES
     lines.forEach(line => {
         const cleanLine = line.trim();
         if (!cleanLine) return;
-
-        if (cleanLine.includes('#')) {
-            const splitIndex = cleanLine.indexOf('#');
-            const color = cleanLine.substring(0, splitIndex).trim();
-            const text = cleanLine.substring(splitIndex + 1).trim();
-
-            htmlOutput += `<h1 style="color:${color}">${text}</h1>`;
+    
+        // Check for the specific syntax: "color# " (Hash followed by a space)
+        if (cleanLine.includes('# ')) {
+            const splitIndex = cleanLine.indexOf('# ');
+            
+            // Everything before the '# ' is the color
+            const colorPart = cleanLine.substring(0, splitIndex).trim();
+            
+            // Everything after the '# ' is the text (offset by 2 to skip the '# ')
+            const text = cleanLine.substring(splitIndex + 2).trim();
+    
+            // If colorPart is empty (e.g., "# My Title"), default to white
+            const finalColor = colorPart === "" ? "white" : colorPart;
+    
+            htmlOutput += `<h1 style="color: ${finalColor}">${text}</h1>`;
         } else {
+            // If there is no "# ", or no space after the #, it's just a body paragraph
             htmlOutput += `<p>${cleanLine}</p>`;
         }
     });
