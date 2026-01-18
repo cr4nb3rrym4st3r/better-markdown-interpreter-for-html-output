@@ -7,12 +7,15 @@ body {
     margin: 0;
     padding: 2rem;
     line-height: 1.6;
-    transition: background-color 0.3s, color 0.3s; /* Smooth theme transitions */
-    min-height: 100vh; /* Ensure full page is clickable */
+    transition: background-color 0.3s, color 0.3s;
+    min-height: 100vh;
+    
+    /* FIX: Default values to match your preferred theme */
+    background-color: black;
+    color: white; 
 }
 
 .better-markdown {
-    opacity: 1; /* Always visible now */
     max-width: 900px;
     margin: 0 auto;
 }
@@ -25,25 +28,25 @@ h1 {
     margin-top: 0;
     margin-bottom: 0.5rem;
     font-weight: 600;
-    cursor: text; /* Indicates it can be edited */
-    min-height: 1.5em; /* Ensures empty headers are clickable */
+    cursor: text;
+    min-height: 1.5em; 
 }
 
 p {
     margin-top: 0;
     margin-bottom: 1rem;
     cursor: text;
-    min-height: 1.5em; /* Ensures empty lines are clickable */
+    min-height: 1.5em; 
 }
 
 /* ================================
    Editor Mode Styling
    ================================ */
 
-/* The input field that appears when you click a line */
 .line-editor {
     width: 100%;
-    background: rgba(255, 255, 255, 0.1);
+    /* FIX: Make input background slightly visible against black */
+    background: rgba(255, 255, 255, 0.15); 
     border: none;
     border-bottom: 1px dashed #666;
     color: inherit;
@@ -55,17 +58,16 @@ p {
     box-sizing: border-box;
 }
 
-/* AWS Status Indicator */
 #save-status {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(50, 50, 50, 0.9);
     color: #fff;
     padding: 8px 12px;
     border-radius: 4px;
     font-size: 0.8rem;
     font-family: monospace;
-    display: none; /* Hidden by default */
+    display: none;
     pointer-events: none;
 }
