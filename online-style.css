@@ -1,59 +1,46 @@
-/* ================================
-   Base Reset & Typography
-   ================================ */
-
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 2rem;
-    line-height: 1.6;
-    transition: background-color 0.3s, color 0.3s;
+    background-color: black; /* Fallback */
+    color: white;
     min-height: 100vh;
-    
-    /* FIX: Default values to match your preferred theme */
-    background-color: black;
-    color: white; 
 }
 
 .better-markdown {
     max-width: 900px;
-    margin: 0 auto;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px transparent solid;
+    transition: border 0.3s;
 }
 
-/* ================================
-   Generated Content Styling
-   ================================ */
+/* Visual cue that a block is editable */
+.better-markdown:hover {
+    border: 1px solid rgba(255,255,255,0.1);
+}
 
-h1 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
+.config-line {
+    opacity: 0.3;
+    font-size: 0.8em;
+    font-family: monospace;
     cursor: text;
-    min-height: 1.5em; 
 }
 
-p {
-    margin-top: 0;
-    margin-bottom: 1rem;
+h1, p {
     cursor: text;
-    min-height: 1.5em; 
+    margin: 0.5rem 0;
 }
-
-/* ================================
-   Editor Mode Styling
-   ================================ */
 
 .line-editor {
     width: 100%;
-    /* FIX: Make input background slightly visible against black */
-    background: rgba(255, 255, 255, 0.15); 
+    background: rgba(255, 255, 255, 0.1);
     border: none;
-    border-bottom: 1px dashed #666;
+    border-left: 3px solid #007bff; /* Visual indicator of active line */
     color: inherit;
-    font-family: monospace;
-    font-size: 1rem;
-    padding: 5px;
-    margin-bottom: 1rem;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 5px 10px;
     outline: none;
     box-sizing: border-box;
 }
@@ -62,12 +49,11 @@ p {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: rgba(50, 50, 50, 0.9);
+    background: #333;
     color: #fff;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-family: monospace;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 12px;
     display: none;
-    pointer-events: none;
+    z-index: 1000;
 }
