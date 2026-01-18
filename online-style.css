@@ -7,13 +7,14 @@ body {
     margin: 0;
     padding: 2rem;
     line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s; /* Smooth theme transitions */
+    min-height: 100vh; /* Ensure full page is clickable */
 }
 
 .better-markdown {
-    /* Prevent flash of unprocessed text */
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease-in;
+    opacity: 1; /* Always visible now */
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 /* ================================
@@ -24,28 +25,47 @@ h1 {
     margin-top: 0;
     margin-bottom: 0.5rem;
     font-weight: 600;
+    cursor: text; /* Indicates it can be edited */
+    min-height: 1.5em; /* Ensures empty headers are clickable */
 }
 
 p {
     margin-top: 0;
     margin-bottom: 1rem;
+    cursor: text;
+    min-height: 1.5em; /* Ensures empty lines are clickable */
 }
 
 /* ================================
-   Optional Enhancements (Safe)
+   Editor Mode Styling
    ================================ */
 
-/* Improve readability on very wide screens */
-@media (min-width: 1200px) {
-    body {
-        max-width: 900px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+/* The input field that appears when you click a line */
+.line-editor {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-bottom: 1px dashed #666;
+    color: inherit;
+    font-family: monospace;
+    font-size: 1rem;
+    padding: 5px;
+    margin-bottom: 1rem;
+    outline: none;
+    box-sizing: border-box;
 }
 
-/* Slight smoothing for headers */
-h1 {
-    letter-spacing: 0.02em;
+/* AWS Status Indicator */
+#save-status {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-family: monospace;
+    display: none; /* Hidden by default */
+    pointer-events: none;
 }
-
