@@ -1,185 +1,39 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const container = document.querySelector('.better-markdown');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Interpreter</title>
+
+    <!-- External stylesheet -->
+    <link rel="stylesheet" href="style.css"><link rel="stylesheet"
+      href="https://cr4nb3rrym4st3r.github.io/better-markdown-interpreter-for-html-output/online-style.css">
+
+    <!-- External interpreter script -->
+    <script src="https://cr4nb3rrym4st3r.github.io/better-markdown-interpreter-for-html-output/online-script.js"
+        defer></script>
+</head>
+
+<body>
+    <div class="better-markdown">
+        ±|white|black
+        # This is a title
+        green# This is my title
+        
+        this is my body text which inherits the default white color.
+        
+        red# Warning Section
+        
+        This text is normal body text again.
+        
+        orange# Another Header
+    </div>
     
-    // Status indicator for Autosave
-    const status = document.createElement('div');
-    status.id = 'save-status';
-    document.body.appendChild(status);
-
-    // FIX 1: Use textContent to preserve the source code newlines
-    // This stops all text from getting stuck on the first line.
-    const rawContent = container.textContent;
-    
-    // Split by newline, filter out empty strings usually caused by HTML indentation
-    let lines = rawContent.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-    
-    // If the file is completely empty, start with one empty line
-    if (lines.length === 0) lines = [""];
-
-    // Configuration State (Default to White Text / Black Background)
-    let config = { color: 'white', bg: 'black' };
-    
-    // Clear the container to rebuild it dynamically
-    container.innerHTML = '';
-    
-    // Initial Render
-    renderAll();
-
-    // ============================================
-    // Core Rendering Logic
-    // ============================================
-
-    function renderAll() {
-        // 1. Updates global theme based on first line
-        updateGlobalConfig();
+    <div style="border: 1px solid gray; padding: 10px; margin: 20px 0;"><strong>Note:</strong> This is a standard HTML box that the script will NOT change.</div>
         
-        // 2. Clear current view
-        container.innerHTML = '';
-
-        // 3. Render each line
-        lines.forEach((text, index) => {
-            const el = createPreviewElement(text, index);
-            container.appendChild(el);
-        });
-    }
-
-    function updateGlobalConfig() {
-        // Check if first line is a config line
-        if (lines.length > 0 && lines[0].startsWith('±')) {
-            const parts = lines[0].split('|');
-            if (parts.length >= 3) {
-                config.color = parts[1].trim();
-                config.bg = parts[2].trim();
-            }
-        }
-        
-        // FIX 2: Explicitly apply styles to body
-        document.body.style.color = config.color;
-        document.body.style.backgroundColor = config.bg;
-    }
-
-    function createPreviewElement(text, index) {
-        let el;
-        
-        // Config line styling (semi-transparent)
-        if (text.startsWith('±')) {
-            el = document.createElement('div');
-            el.style.opacity = '0.3';
-            el.style.fontSize = '0.8em';
-            el.textContent = text; 
-        } 
-        // Header detection
-        else if (text.includes('# ')) {
-            const splitIndex = text.indexOf('# ');
-            const colorPart = text.substring(0, splitIndex).trim();
-            const bodyText = text.substring(splitIndex + 2).trim();
-            const finalColor = colorPart === "" ? config.color : colorPart;
-
-            el = document.createElement('h1');
-            el.style.color = finalColor;
-            
-            // FIX 3: Use innerHTML so raw HTML tags are rendered
-            el.innerHTML = bodyText || '&nbsp;'; 
-        } 
-        // Standard Paragraph
-        else {
-            el = document.createElement('p');
-            // FIX 3: Use innerHTML here as well
-            el.innerHTML = text || '&nbsp;'; 
-        }
-
-        // Add interaction
-        el.dataset.index = index;
-        el.onclick = () => switchToEditMode(index);
-        return el;
-    }
-
-    // ============================================
-    // Editor Logic
-    // ============================================
-
-    function switchToEditMode(index) {
-        const currentEl = container.children[index];
-        if (!currentEl || currentEl.tagName === 'INPUT') return; 
-
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.className = 'line-editor';
-        input.value = lines[index];
-        
-        container.replaceChild(input, currentEl);
-        input.focus();
-
-        input.onblur = () => {
-            commitChange(index, input.value);
-        };
-
-        input.onkeydown = (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                commitChange(index, input.value);
-                insertNewLine(index + 1);
-            }
-            if (e.key === 'Backspace' && input.value === '' && lines.length > 1) {
-                e.preventDefault();
-                deleteLine(index);
-            }
-        };
-    }
-
-    function commitChange(index, newText) {
-        lines[index] = newText;
-        updateGlobalConfig(); 
-        
-        const newPreview = createPreviewElement(newText, index);
-        container.replaceChild(newPreview, container.children[index]);
-        
-        debouncedSave();
-    }
-
-    function insertNewLine(index) {
-        lines.splice(index, 0, ""); 
-        renderAll(); 
-        switchToEditMode(index); 
-    }
-
-    function deleteLine(index) {
-        lines.splice(index, 1);
-        renderAll();
-        if(index > 0) switchToEditMode(index - 1);
-    }
-
-    // ============================================
-    // AWS Autosave Logic
-    // ============================================
-    
-    let timeoutId;
-    function debouncedSave() {
-        status.style.display = 'block';
-        status.innerText = '• Unsaved changes...';
-        
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-            saveToAWS();
-        }, 2000); 
-    }
-
-    async function saveToAWS() {
-        status.innerText = '↻ Syncing to Cloud...';
-        const fullText = lines.join('\n');
-        
-        try {
-            // Simulate network request
-            await new Promise(r => setTimeout(r, 500)); 
-            
-            console.log("Saved content:", fullText);
-            
-            status.innerText = '✓ All changes saved';
-            setTimeout(() => { status.style.display = 'none'; }, 2000);
-
-        } catch (error) {
-            console.error(error);
-            status.innerText = '⚠ Save Failed';
-        }
-    }
-});
+    <div class="better-markdown">
+        red# Warning Section
+        This text is normal body text again.
+    </div>    
+</body>
+</html>
